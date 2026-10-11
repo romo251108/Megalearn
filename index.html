@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10131a">
+  <title>AlphaChat — Connect privately</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- Login / Register -->
+  <section id="authScreen" class="auth-wrap">
+    <div class="auth-card">
+      <div class="brand-mark">α</div>
+      <div class="eyebrow">YOUR SPACE TO CONNECT</div>
+      <h1>Welcome to <span>AlphaChat</span></h1>
+      <p class="muted">Messages, voice and video — all in one place.</p>
+
+      <div class="mode-tabs">
+        <button id="loginTab" class="tab active">Log in</button>
+        <button id="registerTab" class="tab">Create account</button>
+      </div>
+
+      <form id="authForm">
+        <label id="nameLabel" class="hidden">
+          Display name
+          <input id="displayName" placeholder="Your name">
+        </label>
+
+        <label>
+          Email address
+          <input id="email" type="email" required placeholder="you@example.com">
+        </label>
+
+        <label>
+          Password
+          <input id="password" type="password" minlength="6" required placeholder="At least 6 characters">
+        </label>
+
+        <button id="authSubmit" class="primary full" type="submit">
+          Log in
+        </button>
+      </form>
+
+      <p id="authError" class="error"></p>
+      <p class="fine-print">Welcome to your private chat space.</p>
+    </div>
+  </section>
+
+  <!-- Main application -->
+  <section id="appScreen" class="app-shell hidden">
+
+    <aside class="sidebar">
+      <div class="side-brand">
+        <div class="brand-mark small">α</div>
+        <div>
+          <strong>AlphaChat</strong>
+          <small>stay connected</small>
+        </div>
+      </div>
+
+      <div class="me-card">
+        <div id="myAvatar" class="avatar">A</div>
+        <div class="me-info">
+          <strong id="myName">Your profile</strong>
+          <small id="myEmail"></small>
+        </div>
+        <button id="settingsBtn" class="icon-btn">⚙</button>
+      </div>
+
+      <div class="search-wrap">
+        <span>⌕</span>
+        <input id="userSearch" placeholder="Find people...">
+      </div>
+
+      <div class="section-title">
+        <span>CHATS & PEOPLE</span>
+        <span id="peopleCount">0</span>
+      </div>
+
+      <div id="peopleList" class="people-list"></div>
+
+      <div class="sidebar-bottom">
+        <span class="online-dot"></span>
+        <span>Connected workspace</span>
+        <button id="logoutBtn" class="text-btn">Log out</button>
+      </div>
+    </aside>
+
+    <main class="main-panel">
+
+      <header class="chat-header">
+        <div id="emptyHeader" class="header-person">
+          <div class="avatar muted-avatar">α</div>
+          <div>
+            <strong>Choose a conversation</strong>
+            <small>Find someone to start chatting</small>
+          </div>
+        </div>
+
+        <div id="activeHeader" class="header-person hidden">
+          <div id="activeAvatar" class="avatar">?</div>
+          <div>
+            <strong id="activeName">Contact</strong>
+            <small id="activeStatus">AlphaChat member</small>
+          </div>
+        </div>
+
+        <div id="callButtons" class="call-buttons hidden">
+          <button id="audioCallBtn" class="outline-btn">☎ Audio</button>
+          <button id="videoCallBtn" class="outline-btn">▣ Video</button>
+        </div>
+      </header>
+
+      <div id="welcomePanel" class="welcome-panel">
+        <div class="welcome-orb">α</div>
+        <div class="eyebrow">A LITTLE CLOSER, WHEREVER YOU ARE</div>
+        <h2>Good conversations<br><span>start here.</span></h2>
+        <p>Choose someone from the sidebar to send a message or start a call.</p>
+
+        <div class="welcome-pills">
+          <span>✦ Real-time chat</span>
+          <span>⌁ Voice calls</span>
+          <span>▣ Video calls</span>
+        </div>
+      </div>
+
+      <section id="chatPanel" class="chat-panel hidden">
+        <div id="messages" class="messages"></div>
+
+        <form id="messageForm" class="composer">
+          <input id="messageInput" placeholder="Write a message..." maxlength="4000" autocomplete="off">
+          <button id="sendBtn" class="send-btn" type="submit">➤</button>
+        </form>
+
+        <p class="composer-note">Be kind. Keep your account secure.</p>
+      </section>
+
+    </main>
+  </section>
+
+  <!-- Profile settings -->
+  <div id="profileModal" class="modal hidden">
+    <div class="modal-card">
+      <button id="closeProfile" class="modal-close">×</button>
+      <h2>Your profile</h2>
+      <p class="muted">Update how people see you.</p>
+
+      <form id="profileForm">
+        <label>
+          Display name
+          <input id="profileName" required maxlength="50">
+        </label>
+
+        <label>
+          About you
+          <input id="profileAbout" maxlength="120" placeholder="A short status">
+        </label>
+
+        <button class="primary full" type="submit">Save profile</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Audio / video call -->
+  <div id="callOverlay" class="call-overlay hidden">
+    <div class="call-card">
+      <div id="callAvatar" class="call-avatar">A</div>
+      <div id="callType" class="eyebrow">VOICE CALL</div>
+      <h2 id="callPerson">Calling...</h2>
+      <p id="callStatus" class="muted">Connecting...</p>
+
+      <div id="videoStage" class="video-stage hidden">
+        <video id="remoteVideo" autoplay playsinline></video>
+        <video id="localVideo" autoplay muted playsinline></video>
+      </div>
+
+      <audio id="remoteAudio" autoplay></audio>
+
+      <div class="call-controls">
+        <button id="muteBtn" class="call-control">🎙</button>
+        <button id="cameraBtn" class="call-control hidden">▣</button>
+        <button id="endCallBtn" class="call-control hangup">☎</button>
+      </div>
+
+      <p class="fine-print">Calls require microphone and camera permission.</p>
+    </div>
+  </div>
+
+  <!-- Application JavaScript -->
+  <script type="module" src="app.js"></script>
+
+</body>
+</html>
